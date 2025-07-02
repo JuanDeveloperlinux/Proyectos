@@ -1,0 +1,6 @@
+# Proyectos
+# Node modules
+node_modules
+
+#variables de entorno
+.env
