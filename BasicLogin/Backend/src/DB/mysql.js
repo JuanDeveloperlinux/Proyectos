@@ -47,7 +47,19 @@ function getById(tabla,id){
     })
 }
 
-// Esta función agrega o actualiza un registro en la tabla indicada
+//funcion para login
+function getByEmail(tabla,email){
+    return new Promise((resolve,reject) => {
+        connection.query(`SELECT * FROM ${tabla} WHERE email = ?`, [email],
+            (err,result) => {
+            return err ?
+                reject(err):
+                resolve(result)
+        })
+    })
+}
+
+// Esta función agrega un registro en la tabla indicada
 function addOnTable(tabla, data) {
     // Retorna una promesa para poder usar async/await o .then()
     return new Promise((resolve, reject) => {
@@ -70,5 +82,5 @@ function addOnTable(tabla, data) {
 
 
 export default {
-    getById,addOnTable
+    getById,addOnTable,getByEmail
 }
