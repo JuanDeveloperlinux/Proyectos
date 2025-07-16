@@ -60,7 +60,42 @@ export  function userController(injectedDb){
         return db.addOnTable(TABLA, authData)
     }
 
-    return {getUserById,addUser,userLogin}
+    async function userLoginGoogle(name, email) {
+        try {
+            const datafromDB = await db.getByEmail(TABLA, email);
+            let user;
+
+            if (datafromDB.length === 0) {
+                // Usuario no existe → crea uno nuevo sin contraseña
+                const newUser = {
+                    name,
+                    email,
+                    password: null // Porque no hay contraseña con Google
+                };
+                //resultado que devuelve la info que da la base de datos despues de agregar al usuario
+                const result = await addUser(newUser);
+                user = { id: result.insertId, ...newUser };
+            } else {
+                user = datafromDB[0];
+            }
+            //sea que exista de antemano o no le asigna el token
+            const token = asignarToken({
+                id: user.id,
+                name: user.name,
+                email: user.email
+            });
+            //le devuelve el token en un objeto
+            return { success: true,message:"Login exitoso", token };
+
+        } catch (err) {
+            return { success: false, message: err.message };
+        }
+    }
+
+
+
+
+    return {getUserById,addUser,userLogin,userLoginGoogle}
 }
 
 //el controlador se encarga de toda la logica de negocio, verificar que los datos esten bien y que se va a ahcer con ellos, se lo manda a las funciones de la base de datos para que ella haga lo que tiene que hacer

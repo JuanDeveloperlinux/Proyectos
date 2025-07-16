@@ -1,4 +1,5 @@
-const { OAuth2Client } = require('google-auth-library');
+import {OAuth2Client} from "google-auth-library";
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 async function verifyGoogleToken(idToken) {
@@ -10,4 +11,4 @@ async function verifyGoogleToken(idToken) {
     return ticket.getPayload(); // contiene email, name, etc.
 }
 
-module.exports = verifyGoogleToken;
+export default verifyGoogleToken;
